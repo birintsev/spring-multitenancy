@@ -1,0 +1,22 @@
+tenants-config:
+  default-tenant-name: first-tenant
+  tenants:
+    first-tenant:
+      mysql-connection-uri: "${spring.datasource.url}"
+      mongodb-connection-uri: mongodb://root:root@localhost:27017/tenantDb?retryWrites=true&w=majority&authSource=admin
+    second-tenant:
+      mysql-connection-uri: jdbc:mysql://root:root@localhost:3307/tenantDb
+      mongodb-connection-uri: mongodb://root:root@localhost:27018/tenantDb?retryWrites=true&w=majority&authSource=admin
+
+spring:
+  datasource:
+    url: jdbc:mysql://root:root@localhost:3306/tenantDb
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    properties:
+      hibernate:
+        multiTenancy: DATABASE
+        tenant_identifier_resolver: com.github.birintsev.example.multitenancy.datarouting.mysql.TenantIdentifierResolver
+        multi_tenant_connection_provider: com.github.birintsev.example.multitenancy.datarouting.mysql.TenantConnectionProvider
